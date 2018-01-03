@@ -14,3 +14,5 @@
 #include <shader_m.hh>
 #include <world.hh>
 #include <world-renderer.hh>
+#include <light.hh>
+#include <light-renderer.hh>

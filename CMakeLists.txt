@@ -18,6 +18,8 @@ set(
   src/mesh.cc
   src/world.cc
   src/world-renderer.cc
+  src/light.cc
+  src/light-renderer.cc
   )
 
 

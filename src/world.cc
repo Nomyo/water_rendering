@@ -61,7 +61,7 @@ namespace
     {
       for (int x = 0; x < image->w; ++x)
       {
-	auto color = get_grey_value(image, x, z) / 10.0f;
+	auto color = get_grey_value(image, x, z) / 15.0f;
 	vertices.emplace_back(Vertex{glm::vec3(x, color, z),
 	      glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(x, z),
 	      glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
@@ -106,10 +106,11 @@ World::World(Mesh mesh)
   : mesh_(mesh)
 { }
 
-void World::create_mesh(const std::vector<Vertex>& vertices)
+void World::create_mesh(std::vector<Vertex>& vertices)
 {
   std::vector<unsigned int> indices;
 
+  // set indices
   for (unsigned int z = 0; z < height_ - 1; ++z)
   {
     for (unsigned int x = 0; x < width_ - 1; ++x)
@@ -124,11 +125,29 @@ void World::create_mesh(const std::vector<Vertex>& vertices)
     }
   }
 
+  // // set normals
+  for (unsigned int z = 0; z < height_ - 1; ++z)
+  {
+    for (unsigned int x = 0; x < width_ - 1; ++x)
+    {
+      if (x != 0 && x != width_ - 1 && z != 0 && z != height_ - 1)
+      {
+  	float height_l = vertices[z * width_ + x - 1].Position.y;
+  	float height_r = vertices[z * width_ + x + 1].Position.y;
+  	float height_d = vertices[(z - 1) * width_ + x].Position.y;
+  	float height_u = vertices[(z + 1) * width_ + x].Position.y;
+  	glm::vec3 normal{height_l - height_r, 2.0f, height_d - height_u};
+  	normal = glm::normalize(normal);
+  	vertices[z * width_ + x].Normal = normal;
+      }
+    }
+  }
+
   std::vector<Texture> textures;
   Texture texture;
-  texture.id = gen_texture("water.jpg");
+  texture.id = gen_texture("minecraft_grass.jpg");
   texture.type = "texture_diffuse";
-  texture.path = "textures/grass.jpg";
+  texture.path = "textures/minecraft_grass.jpg";
   textures.push_back(texture);
 
   mesh_ = Mesh(vertices, indices, textures);

@@ -7,13 +7,15 @@ int start_opengl()
     return 1;
   auto& global_conf = GlobalConf::get_instance();
   auto camera = global_conf.get_camera();
-  camera->set_camera(glm::vec3(30.0f, 15.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+  camera->set_camera(glm::vec3(30.0f, 25.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f),
 		     90.0f, 0.0f);
 
   // Create our shader
   Shader world_shader("shaders/world.vs", "shaders/world.fs");
+  Shader light_shader("shaders/light.vs", "shaders/light.fs");
 
-  auto world = World("map/heightmap_01.png");
+  auto world = World("map/heightmap_03.png");
+  auto light = Light(glm::vec3{0.0f, 55.0f, 0.0f}, glm::vec3{1.0f, 1.0f, 1.0f});
 
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   float updateFrame = 0.0f;
@@ -44,15 +46,17 @@ int start_opengl()
 
     // render object
     // -------------
-    WorldRenderer wr(world_shader, projection, view);
+    WorldRenderer wr(world_shader, projection, view, light);
     wr.render(world);
+
+    LightRenderer lr(light_shader, projection, view);
+    lr.render(light);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
 
   glfwTerminate();
-
   return 0;
 }
 

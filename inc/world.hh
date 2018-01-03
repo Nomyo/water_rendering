@@ -16,7 +16,7 @@ public:
   ~World() = default;
 
   void draw(Shader shader);
-  void create_mesh(const std::vector<Vertex>& vertices);
+  void create_mesh(std::vector<Vertex>& vertices);
   Mesh get_mesh() const;
 
 private:
