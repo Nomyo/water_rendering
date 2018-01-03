@@ -13,7 +13,7 @@ int start_opengl()
   // Create our shader
   Shader world_shader("shaders/world.vs", "shaders/world.fs");
 
-  auto world = World(50, 50);
+  auto world = World("map/heightmap_01.png");
 
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   float updateFrame = 0.0f;

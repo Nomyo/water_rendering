@@ -9,17 +9,18 @@
 class World
 {
 public:
-    World(unsigned int width, unsigned int height);
-    World(Mesh mesh);
+  World(unsigned int width, unsigned int height);
+  World(const std::string& file);
+  World(Mesh mesh);
 
-    ~World() = default;
+  ~World() = default;
 
-    void draw(Shader shader);
-    void create_mesh();
-    Mesh get_mesh() const;
+  void draw(Shader shader);
+  void create_mesh(const std::vector<Vertex>& vertices);
+  Mesh get_mesh() const;
 
 private:
-    Mesh mesh_;
-    unsigned int width_;
-    unsigned int height_;
+  Mesh mesh_;
+  unsigned int width_;
+  unsigned int height_;
 };
