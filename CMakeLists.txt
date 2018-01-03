@@ -22,10 +22,8 @@ set(
 
 
 add_executable(world ${SOURCE_FILES})
-target_link_libraries(world GLEW)
 target_link_libraries(world glfw3)
 target_link_libraries(world GL)
-target_link_libraries(world m)
 target_link_libraries(world dl)
 target_link_libraries(world Xinerama)
 target_link_libraries(world Xrandr)
@@ -34,4 +32,3 @@ target_link_libraries(world Xcursor)
 target_link_libraries(world X11)
 target_link_libraries(world Xxf86vm)
 target_link_libraries(world pthread)
-target_link_libraries(world assimp)
