@@ -10,6 +10,7 @@ Light::Light(glm::vec3 position, glm::vec3 color)
 
 void Light::init()
 {
+  //FIXME should free VBO
   unsigned int VBO;
   glGenVertexArrays(1, &VAO_);
   glGenBuffers(1, &VBO);

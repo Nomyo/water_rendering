@@ -150,6 +150,12 @@ void World::create_mesh(std::vector<Vertex>& vertices)
   texture.path = "textures/minecraft_grass.jpg";
   textures.push_back(texture);
 
+  Texture texture2;
+  texture2.id = gen_texture("sand.png");
+  texture2.type = "texture_diffuse";
+  texture2.path = "textures/sand.png";
+  textures.push_back(texture2);
+
   mesh_ = Mesh(vertices, indices, textures);
 }
 

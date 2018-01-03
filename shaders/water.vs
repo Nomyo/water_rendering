@@ -6,19 +6,21 @@ layout (location = 2) in vec2 aTexCoords;
 out vec2 TexCoords;
 out vec3 FragPos;
 out vec3 Normal;
-out vec3 pix_pos;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform float time;
 
 void main()
 {
-  FragPos = vec3(model * vec4(aPos, 1.0));
+  vec3 vPos = aPos;
+  vPos.y += sin(time * 2.0 + (vPos.x * vPos.z * 1.0)) * 0.2;
+
+  FragPos = vec3(model * vec4(vPos, 1.0));
   vec4 world_position = vec4(FragPos, 1.0);
   gl_Position = projection * view * world_position;
 
   Normal = aNormal;
   TexCoords = aTexCoords;
-  pix_pos = aPos;
 }

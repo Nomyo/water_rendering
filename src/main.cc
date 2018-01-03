@@ -12,13 +12,17 @@ int start_opengl()
 
   // Create our shader
   Shader world_shader("shaders/world.vs", "shaders/world.fs");
+  Shader water_shader("shaders/water.vs", "shaders/water.fs");
   Shader light_shader("shaders/light.vs", "shaders/light.fs");
 
   auto world = World("map/heightmap_03.png");
+  auto water = Water(glm::vec3{12.0f, 12.5f, 12.0f}, 24.5, 24.5, "water.jpg");
   auto light = Light(glm::vec3{0.0f, 55.0f, 0.0f}, glm::vec3{1.0f, 1.0f, 1.0f});
 
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   float updateFrame = 0.0f;
+  glEnable (GL_BLEND);
+  glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   while (!glfwWindowShouldClose(window))
   {
     // per-frame time logic
@@ -48,6 +52,9 @@ int start_opengl()
     // -------------
     WorldRenderer wr(world_shader, projection, view, light);
     wr.render(world);
+
+    WaterRenderer wt(water_shader, projection, view, light);
+    wt.render(water);
 
     LightRenderer lr(light_shader, projection, view);
     lr.render(light);

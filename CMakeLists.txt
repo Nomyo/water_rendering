@@ -20,6 +20,8 @@ set(
   src/world-renderer.cc
   src/light.cc
   src/light-renderer.cc
+  src/water.cc
+  src/water-renderer.cc
   )
 
 

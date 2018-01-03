@@ -4,24 +4,15 @@ out vec4 FragColor;
 in vec2 TexCoords;
 in vec3 FragPos;
 in vec3 Normal;
-in vec3 pix_pos;
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
 
 uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_diffuse2;
 
 void main()
 {
-  vec4 totalColour;
-  if (pix_pos.y < 12.0f)
-    totalColour = texture(texture_diffuse2, TexCoords);
-  else if (pix_pos.y >= 12.0f && pix_pos.y < 13.0f)
-    totalColour = mix(texture(texture_diffuse1, TexCoords),
-		      texture(texture_diffuse2, TexCoords), 0.6);
-  else
-    totalColour = texture(texture_diffuse1, TexCoords);
+  vec4 totalColour = texture(texture_diffuse1, TexCoords);
 
   // ambient
   float ambientStrength = 0.2;
@@ -34,5 +25,5 @@ void main()
   vec3 diffuse = diff * lightColor;
 
   vec3 resultColor = (ambient + diffuse) * totalColour.xyz;
-  FragColor = vec4(resultColor.x, resultColor.y, resultColor.z, 1.0f);
+  FragColor = vec4(resultColor.x, resultColor.y, resultColor.z, 0.5f);
 }

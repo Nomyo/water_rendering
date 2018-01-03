@@ -16,3 +16,5 @@
 #include <world-renderer.hh>
 #include <light.hh>
 #include <light-renderer.hh>
+#include <water.hh>
+#include <water-renderer.hh>
