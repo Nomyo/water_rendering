@@ -17,9 +17,6 @@ void main()
   vec4 totalColour;
   if (pix_pos.y < 12.0f)
     totalColour = texture(texture_diffuse2, TexCoords);
-  else if (pix_pos.y >= 12.0f && pix_pos.y < 13.0f)
-    totalColour = mix(texture(texture_diffuse1, TexCoords),
-		      texture(texture_diffuse2, TexCoords), 0.6);
   else
     totalColour = texture(texture_diffuse1, TexCoords);
 

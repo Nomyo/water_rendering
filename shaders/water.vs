@@ -14,10 +14,7 @@ uniform float time;
 
 void main()
 {
-  vec3 vPos = aPos;
-  vPos.y += sin(time * 2.0 + (vPos.x * vPos.z * 1.0)) * 0.2;
-
-  FragPos = vec3(model * vec4(vPos, 1.0));
+  FragPos = vec3(model * vec4(aPos, 1.0));
   vec4 world_position = vec4(FragPos, 1.0);
   gl_Position = projection * view * world_position;
 
