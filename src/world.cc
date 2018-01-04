@@ -63,7 +63,7 @@ namespace
       {
 	auto color = get_grey_value(image, x, z) / 15.0f;
 	vertices.emplace_back(Vertex{glm::vec3(x, color, z),
-	      glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(x, z),
+	      glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
 	      glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
       }
     }
@@ -80,7 +80,7 @@ namespace
       for (unsigned int x = 0; x < width; ++x)
       {
 	vertices.emplace_back(Vertex{glm::vec3(x, 0.0f, z),
-	      glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(x, z),
+	      glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
 	      glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
       }
     }
@@ -162,6 +162,16 @@ void World::create_mesh(std::vector<Vertex>& vertices)
 void World::draw(Shader shader)
 {
   mesh_.draw(shader);
+}
+
+unsigned int World::get_width() const
+{
+  return width_;
+}
+
+unsigned int World::get_height() const
+{
+  return height_;
 }
 
 Mesh World::get_mesh() const

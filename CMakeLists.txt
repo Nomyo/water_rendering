@@ -22,6 +22,8 @@ set(
   src/light-renderer.cc
   src/water.cc
   src/water-renderer.cc
+  src/skybox.cc
+  src/skybox-renderer.cc
   )
 
 

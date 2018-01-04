@@ -18,6 +18,8 @@ public:
   void draw(Shader shader);
   void create_mesh(std::vector<Vertex>& vertices);
   Mesh get_mesh() const;
+  unsigned int get_width() const;
+  unsigned int get_height() const;
 
 private:
   Mesh mesh_;

@@ -18,3 +18,5 @@
 #include <light-renderer.hh>
 #include <water.hh>
 #include <water-renderer.hh>
+#include <skybox.hh>
+#include <skybox-renderer.hh>

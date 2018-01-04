@@ -2,6 +2,7 @@
 
 int start_opengl()
 {
+
   GLFWwindow *window = window_init();
   if (!window)
     return 1;
@@ -14,10 +15,17 @@ int start_opengl()
   Shader world_shader("shaders/world.vs", "shaders/world.fs");
   Shader water_shader("shaders/water.vs", "shaders/water.fs");
   Shader light_shader("shaders/light.vs", "shaders/light.fs");
+  Shader skybox_shader("shaders/skybox.vs", "shaders/skybox.fs");
+
+  std::vector<std::string> faces{"textures/sky-right.jpg", "textures/sky-left.jpg",
+      "textures/sky-top.jpg", "textures/sky-bottom.jpg", "textures/sky-back.jpg",
+      "textures/sky-front.jpg" };
 
   auto world = World("map/heightmap_03.png");
   auto water = Water(glm::vec3{12.0f, 12.5f, 12.0f}, 24.5, 24.5, "water.jpg");
-  auto light = Light(glm::vec3{0.0f, 55.0f, 0.0f}, glm::vec3{1.0f, 1.0f, 1.0f});
+  auto light = Light(glm::vec3{world.get_width(), 55.0f, 0.0f}, glm::vec3{1.0f, 1.0f, 1.0f});
+  auto skybox = Skybox(faces);
+  skybox.init(skybox_shader);
 
   //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   float updateFrame = 0.0f;
@@ -56,8 +64,16 @@ int start_opengl()
     WaterRenderer wt(water_shader, projection, view, light);
     wt.render(water);
 
-    LightRenderer lr(light_shader, projection, view);
-    lr.render(light);
+    // For now do not display the light, use the sun of the skybox
+    // LightRenderer lr(light_shader, projection, view);
+    // lr.render(light);
+
+    // remove translation from the view matrix
+    glDepthFunc(GL_LEQUAL);
+    view = glm::mat4(glm::mat3(camera->get_view_matrix()));
+    SkyboxRenderer sr(skybox_shader, projection, view);
+    sr.render(skybox);
+    glDepthFunc(GL_LESS);
 
     glfwSwapBuffers(window);
     glfwPollEvents();
