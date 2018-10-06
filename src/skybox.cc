@@ -55,6 +55,12 @@ Skybox::Skybox(const std::vector<std::string>& faces)
 {
 }
 
+Skybox::~Skybox()
+{
+  glDeleteVertexArrays(1, &VAO_);
+  glDeleteBuffers(1, &VBO_);
+}
+
 void Skybox::init(Shader& shader)
 {
   texture_id_ = loadCubemap(faces_);

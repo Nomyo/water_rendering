@@ -147,3 +147,14 @@ void Camera::print_debug()
 	      << right_.z << " "
 	      << std::endl;
 }
+
+void Camera::inc_view_pos(const glm::vec3& position)
+{
+  position_ += position;
+}
+
+void Camera::invert_pitch()
+{
+  pitch_ = -pitch_;
+  update_vectors();
+}

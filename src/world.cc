@@ -21,9 +21,9 @@ namespace
       return *(Uint16 *)p;
     case 3:
       if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-	return p[0] << 16 | p[1] << 8 | p[2];
+        return p[0] << 16 | p[1] << 8 | p[2];
       else
-	return p[0] | p[1] << 8 | p[2] << 16;
+        return p[0] | p[1] << 8 | p[2] << 16;
     case 4:
       return *(Uint32 *)p;
     default:
@@ -43,8 +43,8 @@ namespace
 
 
   std::vector<Vertex> read_height_map(const std::string& file,
-				      unsigned int *height,
-				      unsigned int *width)
+                                      unsigned int *height,
+                                      unsigned int *width)
   {
     std::vector<Vertex> vertices;
     SDL_Surface *image = IMG_Load(file.c_str());
@@ -61,10 +61,10 @@ namespace
     {
       for (int x = 0; x < image->w; ++x)
       {
-	auto color = get_grey_value(image, x, z) / 15.0f;
-	vertices.emplace_back(Vertex{glm::vec3(x, color, z),
-	      glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
-	      glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
+        auto color = get_grey_value(image, x, z) / 15.0f;
+        vertices.emplace_back(Vertex{glm::vec3(x, color, z),
+              glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
+              glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
       }
     }
 
@@ -79,9 +79,9 @@ namespace
     {
       for (unsigned int x = 0; x < width; ++x)
       {
-	vertices.emplace_back(Vertex{glm::vec3(x, 0.0f, z),
-	      glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
-	      glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
+        vertices.emplace_back(Vertex{glm::vec3(x, 0.0f, z),
+              glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
+              glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
       }
     }
     return vertices;
@@ -106,6 +106,11 @@ World::World(Mesh mesh)
   : mesh_(mesh)
 { }
 
+World::~World()
+{
+  mesh_.free_resources();
+}
+
 void World::create_mesh(std::vector<Vertex>& vertices)
 {
   std::vector<unsigned int> indices;
@@ -115,30 +120,30 @@ void World::create_mesh(std::vector<Vertex>& vertices)
   {
     for (unsigned int x = 0; x < width_ - 1; ++x)
     {
-      int start = x + z * height_;
+      int start = x + z * width_;
       indices.push_back(start);
       indices.push_back(start + 1);
-      indices.push_back(start + height_);
+      indices.push_back(start + width_);
       indices.push_back(start + 1);
-      indices.push_back(start + 1 + height_);
-      indices.push_back(start + height_);
+      indices.push_back(start + 1 + width_);
+      indices.push_back(start + width_);
     }
   }
 
-  // // set normals
+  // set normals
   for (unsigned int z = 0; z < height_ - 1; ++z)
   {
     for (unsigned int x = 0; x < width_ - 1; ++x)
     {
       if (x != 0 && x != width_ - 1 && z != 0 && z != height_ - 1)
       {
-  	float height_l = vertices[z * width_ + x - 1].Position.y;
-  	float height_r = vertices[z * width_ + x + 1].Position.y;
-  	float height_d = vertices[(z - 1) * width_ + x].Position.y;
-  	float height_u = vertices[(z + 1) * width_ + x].Position.y;
-  	glm::vec3 normal{height_l - height_r, 2.0f, height_d - height_u};
-  	normal = glm::normalize(normal);
-  	vertices[z * width_ + x].Normal = normal;
+        float height_l = vertices[z * width_ + x - 1].Position.y;
+        float height_r = vertices[z * width_ + x + 1].Position.y;
+        float height_d = vertices[(z - 1) * width_ + x].Position.y;
+        float height_u = vertices[(z + 1) * width_ + x].Position.y;
+        glm::vec3 normal{height_l - height_r, 2.0f, height_d - height_u};
+        normal = glm::normalize(normal);
+        vertices[z * width_ + x].Normal = normal;
       }
     }
   }

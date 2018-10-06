@@ -17,13 +17,14 @@ int start_opengl()
   Shader light_shader("shaders/light.vs", "shaders/light.fs");
   Shader skybox_shader("shaders/skybox.vs", "shaders/skybox.fs");
 
-  std::vector<std::string> faces{"textures/sky-right.jpg", "textures/sky-left.jpg",
-      "textures/sky-top.jpg", "textures/sky-bottom.jpg", "textures/sky-back.jpg",
-      "textures/sky-front.jpg" };
+  std::vector<std::string> faces{"textures/sky-left.jpg", "textures/sky-right.jpg",
+      "textures/sky-top.jpg", "textures/sky-bottom.jpg", "textures/sky-front.jpg",
+      "textures/sky-back.jpg" };
 
   auto world = World("map/heightmap_03.png");
   auto water = Water(glm::vec3{12.0f, 12.5f, 12.0f}, 24.5, 24.5, "water.jpg");
-  auto light = Light(glm::vec3{world.get_width(), 55.0f, 0.0f}, glm::vec3{1.0f, 1.0f, 1.0f});
+  auto light = Light(glm::vec3{15.0f / 2, 50.0f, 30.0f},
+                     glm::vec3{1.0f, 1.0f, 1.0f});
   auto skybox = Skybox(faces);
   skybox.init(skybox_shader);
 
@@ -31,8 +32,10 @@ int start_opengl()
   float updateFrame = 0.0f;
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   while (!glfwWindowShouldClose(window))
   {
+
     // per-frame time logic
     // --------------------
     float currentFrame = glfwGetTime();
@@ -44,36 +47,64 @@ int start_opengl()
     // -----
     global_conf.process_input(window);
 
-    // render
-    // ------
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    auto render_scene = [&](const glm::vec4 clip_plane, bool fb=false)
+      {
+        // render
+        // ------
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 projection = glm::perspective(
-      glm::radians(camera->get_zoom()),
-      (float)GlobalConf::SCR_WIDTH / (float)GlobalConf::SCR_HEIGHT,
-      0.1f, 500.0f);
+        glm::mat4 projection = glm::perspective(
+                                                glm::radians(camera->get_zoom()),
+                                                (float)GlobalConf::SCR_WIDTH /
+                                                (float)GlobalConf::SCR_HEIGHT,
+                                                0.1f, 500.0f);
 
-    glm::mat4 view = camera->get_view_matrix();
+        glm::mat4 view = camera->get_view_matrix();
 
-    // render object
-    // -------------
-    WorldRenderer wr(world_shader, projection, view, light);
-    wr.render(world);
+        // render object
+        // -------------
+        WorldRenderer wr(world_shader, projection, view, light, clip_plane);
+        wr.render(world);
 
-    WaterRenderer wt(water_shader, projection, view, light);
-    wt.render(water);
+        glDisable(GL_CLIP_PLANE0);
+        if (!fb) {
+          WaterRenderer wt(water_shader, projection, view, light);
+          wt.render(water);
+        }
 
-    // For now do not display the light, use the sun of the skybox
-    // LightRenderer lr(light_shader, projection, view);
-    // lr.render(light);
+        // remove translation from the view matrix
+        glDepthFunc(GL_LEQUAL);
+        view = glm::mat4(glm::mat3(camera->get_view_matrix()));
+        SkyboxRenderer sr(skybox_shader, projection, view);
+        sr.render(skybox);
+        glDepthFunc(GL_LESS);
 
-    // remove translation from the view matrix
-    glDepthFunc(GL_LEQUAL);
-    view = glm::mat4(glm::mat3(camera->get_view_matrix()));
-    SkyboxRenderer sr(skybox_shader, projection, view);
-    sr.render(skybox);
-    glDepthFunc(GL_LESS);
+        glEnable(GL_CLIP_PLANE0);
+      };
+
+    glEnable(GL_CLIP_PLANE0);
+
+    // render reflection
+    water.bind_reflection_fb();
+    glm::vec3 old_camera_view_pos = camera->get_view_pos();
+    float distance = 2 * (old_camera_view_pos.y  - water.get_height());
+    camera->inc_view_pos(glm::vec3(0, -distance, 0));
+    camera->invert_pitch();
+    render_scene(glm::vec4{0.0f, 1.0f, 0.0f, -water.get_height()}, true);
+    camera->inc_view_pos(glm::vec3(0, distance, 0));
+    camera->invert_pitch();
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // render refraction
+    water.bind_refraction_fb();
+    render_scene(glm::vec4{0.0f, -1.0f, 0.0f, water.get_height()}, true);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glDisable(GL_CLIP_PLANE0);
+
+    // render main scene
+    render_scene(glm::vec4{0.0f, -1.0f, 0.0f, 10000});
 
     glfwSwapBuffers(window);
     glfwPollEvents();

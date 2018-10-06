@@ -10,7 +10,7 @@ class Light
 {
 public:
   Light(glm::vec3 position, glm::vec3 color);
-  ~Light() = default;
+  ~Light();
 
   void init();
   void draw(Shader shader);
@@ -23,4 +23,5 @@ private:
   glm::vec3 position_;
   glm::vec3 color_;
   unsigned int VAO_;
+  unsigned int VBO_;
 };

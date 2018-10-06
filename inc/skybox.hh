@@ -11,7 +11,7 @@ class Skybox
 {
 public:
   Skybox(const std::vector<std::string>& faces);
-  ~Skybox() = default;
+  ~Skybox();
 
   void init(Shader& shader);
   void draw();

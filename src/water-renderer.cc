@@ -11,6 +11,8 @@ WaterRenderer::WaterRenderer(Shader shader, glm::mat4 projection_mat,
   shader_.setVec3("lightPos", light.get_position());
   shader_.setVec3("lightColor", light.get_color());
   shader_.setFloat("time", glfwGetTime());
+  shader_.setInt("reflection_texture", 0);
+  shader_.setInt("refraction_texture", 1);
 }
 
 void WaterRenderer::render(Water& w)

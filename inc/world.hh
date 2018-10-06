@@ -13,7 +13,7 @@ public:
   World(const std::string& file);
   World(Mesh mesh);
 
-  ~World() = default;
+  ~World();
 
   void draw(Shader shader);
   void create_mesh(std::vector<Vertex>& vertices);

@@ -8,14 +8,18 @@ Light::Light(glm::vec3 position, glm::vec3 color)
   init();
 }
 
+Light::~Light()
+{
+  glDeleteVertexArrays(1, &VAO_);
+  glDeleteBuffers(1, &VBO_);
+}
+
 void Light::init()
 {
-  //FIXME should free VBO
-  unsigned int VBO;
   glGenVertexArrays(1, &VAO_);
-  glGenBuffers(1, &VBO);
+  glGenBuffers(1, &VBO_);
 
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO_);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
   glBindVertexArray(VAO_);
 
