@@ -16,13 +16,31 @@ int start_opengl()
   Shader water_shader("shaders/water.vs", "shaders/water.fs");
   Shader light_shader("shaders/light.vs", "shaders/light.fs");
   Shader skybox_shader("shaders/skybox.vs", "shaders/skybox.fs");
+  Shader tree_shader("shaders/model.vs", "shaders/tree.fs");
+  Shader rock_shader("shaders/model.vs", "shaders/rock.fs");
 
   std::vector<std::string> faces{"textures/sky-left.jpg", "textures/sky-right.jpg",
       "textures/sky-top.jpg", "textures/sky-bottom.jpg", "textures/sky-front.jpg",
       "textures/sky-back.jpg" };
 
+  // Init environment entities
+  auto tree_model = Model("textures/pine.obj", "textures/pine.png", "", false);
+  auto rock_model = Model("textures/rock1.obj", "textures/rock1.jpg", "", false);
+
+  auto tree1 = Entity(&tree_model, {18, 11.5, 15}, {0, 1, 0}, 0.8);
+  auto tree2 = Entity(&tree_model, {35, 11.5, 14}, {0, 15, 0}, 0.55);
+  auto tree3 = Entity(&tree_model, {32, 11.5, 10}, {0, 10, 0}, 0.65);
+  auto tree4 = Entity(&tree_model, {12, 11.5, 25}, {0, 1, 0}, 0.75);
+  auto tree5 = Entity(&tree_model, {10, 11.5, 10}, {0, 55, 0}, 0.45);
+  auto tree6 = Entity(&tree_model, {40, 11.5, 30}, {0, 55, 0}, 0.65);
+  auto tree7 = Entity(&tree_model, {35, 11.5, 35}, {0, 55, 0}, 0.75);
+  auto tree8 = Entity(&tree_model, {30, 11.5, 40}, {0, 55, 0}, 0.45);
+  auto rock = Entity(&rock_model, {20, 12, 35}, {0, 1, 0}, 0.02);
+  auto rock2 = Entity(&rock_model, {18, 13, 36}, {0, 10, 0}, 0.01);
+  auto rock3 = Entity(&rock_model, {22, 13, 40}, {0, 1, 1}, 0.015);
+
   auto world = World("map/heightmap_03.png");
-  auto water = Water(glm::vec3{12.0f, 12.5f, 12.0f}, 24.5, 24.5, "water.jpg");
+  auto water = Water(glm::vec3{12.0f, 12.5f, 12.0f}, 24.5, 24.5);
   auto light = Light(glm::vec3{15.0f / 2, 50.0f, 30.0f},
                      glm::vec3{1.0f, 1.0f, 1.0f});
   auto skybox = Skybox(faces);
@@ -32,6 +50,7 @@ int start_opengl()
   float updateFrame = 0.0f;
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 
   while (!glfwWindowShouldClose(window))
   {
@@ -66,6 +85,12 @@ int start_opengl()
         // -------------
         WorldRenderer wr(world_shader, projection, view, light, clip_plane);
         wr.render(world);
+
+        EntityRenderer er(tree_shader, projection, view, light);
+        er.render({tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8});
+
+        EntityRenderer erock(rock_shader, projection, view, light);
+        erock.render({rock, rock2, rock3});
 
         glDisable(GL_CLIP_PLANE0);
         if (!fb) {

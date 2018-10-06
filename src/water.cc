@@ -3,22 +3,12 @@
 #include <stdint.h>
 #include <iostream>
 
-
 Water::Water(glm::vec3 position, unsigned int width, unsigned int height)
   : position_(position)
   , width_(width)
   , height_(height)
 {
-
-}
-
-Water::Water(glm::vec3 position, unsigned int width, unsigned int height,
-	     const std::string& texture_file)
-  : position_(position)
-  , width_(width)
-  , height_(height)
-{
-  create_mesh(texture_file);
+  create_mesh();
   create_frame_buffers();
 }
 
@@ -34,7 +24,7 @@ Water::~Water()
   glDeleteRenderbuffers(1, &refractionDepthBuffer);
 }
 
-void Water::create_mesh(const std::string& texture_file)
+void Water::create_mesh()
 {
   std::vector<unsigned int> indices;
   std::vector<Vertex> vertices;

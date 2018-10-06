@@ -9,12 +9,10 @@ class Water
 {
 public:
   Water(glm::vec3 position, unsigned int width, unsigned int height);
-  Water(glm::vec3 position, unsigned int width, unsigned int height,
-	const std::string& texture_file);
   ~Water();
 
   void draw(Shader shader);
-  void create_mesh(const std::string& texture_file);
+  void create_mesh();
   void create_frame_buffers();
   void bind_reflection_fb();
   void bind_refraction_fb();

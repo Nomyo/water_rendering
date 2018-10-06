@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include <glob_conf.hh>
 #include <opengl-utils.hh>
@@ -20,3 +21,6 @@
 #include <water-renderer.hh>
 #include <skybox.hh>
 #include <skybox-renderer.hh>
+#include <model.hh>
+#include <entity.hh>
+#include <entity-renderer.hh>

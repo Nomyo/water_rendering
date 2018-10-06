@@ -24,6 +24,9 @@ set(
   src/water-renderer.cc
   src/skybox.cc
   src/skybox-renderer.cc
+  src/model.cc
+  src/entity.cc
+  src/entity-renderer.cc
   )
 
 
@@ -41,3 +44,4 @@ target_link_libraries(world pthread)
 target_link_libraries(world SDL2)
 target_link_libraries(world SDL2main)
 target_link_libraries(world SDL2_image)
+target_link_libraries(world assimp)
