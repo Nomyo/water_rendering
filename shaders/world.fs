@@ -28,7 +28,7 @@ void main()
     totalColour = mix(t1, t2, 0.75);
   }
   else
-    totalColour = texture(texture_diffuse1, TexCoords);
+    totalColour = texture(texture_diffuse1, TexCoords * 0.2);
 
   // ambient
   float ambientStrength = 0.2;

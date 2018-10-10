@@ -37,6 +37,8 @@ private:
   unsigned int refractionHeight = 950;
   unsigned int refractionWidth = 1300;
 
+  unsigned int dudv_texture_;
+
   unsigned int width_;
   unsigned int height_;
 };

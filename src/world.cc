@@ -150,9 +150,9 @@ void World::create_mesh(std::vector<Vertex>& vertices)
 
   std::vector<Texture> textures;
   Texture texture;
-  texture.id = gen_texture("minecraft_grass.jpg");
+  texture.id = gen_texture("grass2.jpg");
   texture.type = "texture_diffuse";
-  texture.path = "textures/minecraft_grass.jpg";
+  texture.path = "textures/grass2.jpg";
   textures.push_back(texture);
 
   Texture texture2;

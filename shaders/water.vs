@@ -6,11 +6,13 @@ layout (location = 2) in vec2 aTexCoords;
 out vec4 clipSpace;
 out vec3 FragPos;
 out vec3 Normal;
+out vec2 TextureCoords;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform float time;
+
+const float tiling = 0.20;
 
 void main()
 {
@@ -19,4 +21,5 @@ void main()
   gl_Position = projection * view * world_position;
   clipSpace = gl_Position;
   Normal = aNormal;
+  TextureCoords = vec2((aTexCoords.x / 2.0) + 0.5, (aTexCoords.y / 2.0) + 0.5) * tiling;
 }

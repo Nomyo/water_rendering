@@ -10,6 +10,7 @@ Water::Water(glm::vec3 position, unsigned int width, unsigned int height)
 {
   create_mesh();
   create_frame_buffers();
+  dudv_texture_ = gen_texture("dudv.jpg");
 }
 
 Water::~Water()
@@ -150,6 +151,8 @@ void Water::draw(Shader shader)
   glBindTexture(GL_TEXTURE_2D, reflectionTexture);
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, refractionTexture);
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, dudv_texture_);
 
   mesh_.draw(shader);
 }
