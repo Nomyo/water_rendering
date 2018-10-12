@@ -9,7 +9,8 @@ class WaterRenderer
 {
 public:
   WaterRenderer(Shader shader, glm::mat4 projection_mat,
-		glm::mat4 view_mat, const Light& light);
+                glm::mat4 view_mat, const Light& light,
+                const glm::vec3 cameraPosition);
   ~WaterRenderer() = default;
 
   void render(Water& w);

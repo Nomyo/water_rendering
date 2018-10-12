@@ -9,7 +9,7 @@ int start_opengl()
   auto& global_conf = GlobalConf::get_instance();
   auto camera = global_conf.get_camera();
   camera->set_camera(glm::vec3(30.0f, 25.0f, 10.0f), glm::vec3(0.0f, 1.0f, 0.0f),
-		     90.0f, 0.0f);
+                     90.0f, 0.0f);
 
   // Create our shader
   Shader world_shader("shaders/world.vs", "shaders/world.fs");
@@ -41,19 +41,16 @@ int start_opengl()
 
   auto world = World("map/heightmap_03.png");
   auto water = Water(glm::vec3{12.0f, 12.5f, 12.0f}, 24.5, 24.5);
-  auto light = Light(glm::vec3{15.0f / 2, 50.0f, 30.0f},
+  auto light = Light(glm::vec3{15.0f / 2, 20.0f, 30.0f},
                      glm::vec3{1.0f, 1.0f, 1.0f});
   auto skybox = Skybox(faces);
   skybox.init(skybox_shader);
 
-  //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   float updateFrame = 0.0f;
   glEnable (GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-  while (!glfwWindowShouldClose(window))
-  {
+  while (!glfwWindowShouldClose(window)) {
 
     // per-frame time logic
     // --------------------
@@ -67,46 +64,46 @@ int start_opengl()
     global_conf.process_input(window);
 
     auto render_scene = [&](const glm::vec4 clip_plane, bool fb=false)
-      {
-        // render
-        // ------
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    {
+      // render
+      // ------
+      glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 projection = glm::perspective(
-                                                glm::radians(camera->get_zoom()),
-                                                (float)GlobalConf::SCR_WIDTH /
-                                                (float)GlobalConf::SCR_HEIGHT,
-                                                0.1f, 500.0f);
+      glm::mat4 projection = glm::perspective(
+                                              glm::radians(camera->get_zoom()),
+                                              (float)GlobalConf::SCR_WIDTH /
+                                              (float)GlobalConf::SCR_HEIGHT,
+                                              0.1f, 500.0f);
 
-        glm::mat4 view = camera->get_view_matrix();
+      glm::mat4 view = camera->get_view_matrix();
 
-        // render object
-        // -------------
-        WorldRenderer wr(world_shader, projection, view, light, clip_plane);
-        wr.render(world);
+      // render object
+      // -------------
+      WorldRenderer wr(world_shader, projection, view, light, clip_plane);
+      wr.render(world);
 
-        EntityRenderer er(tree_shader, projection, view, light);
-        er.render({tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8});
+      EntityRenderer er(tree_shader, projection, view, light);
+      er.render({tree1, tree2, tree3, tree4, tree5, tree6, tree7, tree8});
 
-        EntityRenderer erock(rock_shader, projection, view, light);
-        erock.render({rock, rock2, rock3});
+      EntityRenderer erock(rock_shader, projection, view, light);
+      erock.render({rock, rock2, rock3});
 
-        glDisable(GL_CLIP_PLANE0);
-        if (!fb) {
-          WaterRenderer wt(water_shader, projection, view, light);
-          wt.render(water);
-        }
+      glDisable(GL_CLIP_PLANE0);
+      if (!fb) {
+        WaterRenderer wt(water_shader, projection, view, light, camera->get_view_pos());
+        wt.render(water);
+      }
 
-        // remove translation from the view matrix
-        glDepthFunc(GL_LEQUAL);
-        view = glm::mat4(glm::mat3(camera->get_view_matrix()));
-        SkyboxRenderer sr(skybox_shader, projection, view);
-        sr.render(skybox);
-        glDepthFunc(GL_LESS);
+      // remove translation from the view matrix
+      glDepthFunc(GL_LEQUAL);
+      view = glm::mat4(glm::mat3(camera->get_view_matrix()));
+      SkyboxRenderer sr(skybox_shader, projection, view);
+      sr.render(skybox);
+      glDepthFunc(GL_LESS);
 
-        glEnable(GL_CLIP_PLANE0);
-      };
+      glEnable(GL_CLIP_PLANE0);
+    };
 
     glEnable(GL_CLIP_PLANE0);
 

@@ -38,6 +38,7 @@ private:
   unsigned int refractionWidth = 1300;
 
   unsigned int dudv_texture_;
+  unsigned int normal_map_;
 
   unsigned int width_;
   unsigned int height_;
