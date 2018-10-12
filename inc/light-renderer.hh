@@ -9,7 +9,7 @@ class LightRenderer
 {
 public:
   LightRenderer(Shader shader, glm::mat4 projection_mat,
-		glm::mat4 view_mat);
+                glm::mat4 view_mat);
   ~LightRenderer() = default;
 
   void render(Light& l);

@@ -9,7 +9,7 @@ class SkyboxRenderer
 {
 public:
   SkyboxRenderer(Shader shader, glm::mat4 projection_mat,
-		glm::mat4 view_mat);
+                 glm::mat4 view_mat);
   ~SkyboxRenderer() = default;
 
   void render(Skybox& l);

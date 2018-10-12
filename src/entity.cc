@@ -1,7 +1,7 @@
 #include <entity.hh>
 
 Entity::Entity(Model *model, glm::vec3 position, glm::vec3 rotate,
-	       float scale)
+               float scale)
   : direction_(glm::vec3{0.0f, 1.0f, 0.0f})
   , model_(model)
   , position_(position)

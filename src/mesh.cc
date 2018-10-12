@@ -1,7 +1,7 @@
 #include <mesh.hh>
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices,
-	   std::vector<Texture> textures)
+           std::vector<Texture> textures)
   : vertices_(vertices)
   , indices_(indices)
   , textures_(textures)
@@ -23,8 +23,7 @@ void Mesh::draw(Shader shader)
   unsigned int normalNr = 1;
   unsigned heightNr = 1;
 
-  for (unsigned int i = 0; i < textures_.size(); ++i)
-  {
+  for (unsigned int i = 0; i < textures_.size(); ++i) {
     // Active right texture unit before binding
     glActiveTexture(GL_TEXTURE0 + i);
 
@@ -67,11 +66,11 @@ void Mesh::setup_mesh()
   // Load data into vertex buffers
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, vertices_.size() * sizeof(Vertex),
-	       &vertices_[0], GL_STATIC_DRAW);
+               &vertices_[0], GL_STATIC_DRAW);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_.size() * sizeof(unsigned int),
-	       &indices_[0], GL_STATIC_DRAW);
+               &indices_[0], GL_STATIC_DRAW);
 
   // Set the vertex attribute pointers
 
@@ -82,20 +81,20 @@ void Mesh::setup_mesh()
   // vertex normals
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-			(void*)offsetof(Vertex, Normal));
+                        (void*)offsetof(Vertex, Normal));
   // vertex texture coords
   glEnableVertexAttribArray(2);
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-			(void*)offsetof(Vertex, TexCoords));
+                        (void*)offsetof(Vertex, TexCoords));
   // vertex tangent
   glEnableVertexAttribArray(3);
   glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-			(void*)offsetof(Vertex, Tangent));
+                        (void*)offsetof(Vertex, Tangent));
 
   // vertex bitangent
   glEnableVertexAttribArray(4);
   glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
-			(void*)offsetof(Vertex, Bitangent));
+                        (void*)offsetof(Vertex, Bitangent));
 
   glBindVertexArray(0);
 }

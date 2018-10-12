@@ -31,23 +31,19 @@ void Water::create_mesh()
   std::vector<unsigned int> indices;
   std::vector<Vertex> vertices;
 
-  for (unsigned int z = 0; z < height_; ++z)
-  {
-    for (unsigned int x = 0; x < width_; ++x)
-    {
+  for (unsigned int z = 0; z < height_; ++z) {
+    for (unsigned int x = 0; x < width_; ++x) {
       vertices.emplace_back(Vertex{glm::vec3(x + position_.x ,
-					     0.0f + position_.y,
-					     z + position_.z),
-	    glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(x, z),
-	    glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
+                                             0.0f + position_.y,
+                                             z + position_.z),
+            glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2(x, z),
+            glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
     }
   }
 
   // set indices
-  for (unsigned int z = 0; z < height_ - 1; ++z)
-  {
-    for (unsigned int x = 0; x < width_ - 1; ++x)
-    {
+  for (unsigned int z = 0; z < height_ - 1; ++z) {
+    for (unsigned int x = 0; x < width_ - 1; ++x) {
       int start = x + z * height_;
       indices.push_back(start);
       indices.push_back(start + 1);
@@ -59,19 +55,16 @@ void Water::create_mesh()
   }
 
   // set normals
-  for (unsigned int z = 0; z < height_ - 1; ++z)
-  {
-    for (unsigned int x = 0; x < width_ - 1; ++x)
-    {
-      if (x != 0 && x != width_ - 1 && z != 0 && z != height_ - 1)
-      {
-  	float height_l = vertices[z * width_ + x - 1].Position.y;
-  	float height_r = vertices[z * width_ + x + 1].Position.y;
-  	float height_d = vertices[(z - 1) * width_ + x].Position.y;
-  	float height_u = vertices[(z + 1) * width_ + x].Position.y;
-  	glm::vec3 normal{height_l - height_r, 2.0f, height_d - height_u};
-  	normal = glm::normalize(normal);
-  	vertices[z * width_ + x].Normal = normal;
+  for (unsigned int z = 0; z < height_ - 1; ++z) {
+    for (unsigned int x = 0; x < width_ - 1; ++x) {
+      if (x != 0 && x != width_ - 1 && z != 0 && z != height_ - 1) {
+        float height_l = vertices[z * width_ + x - 1].Position.y;
+        float height_r = vertices[z * width_ + x + 1].Position.y;
+        float height_d = vertices[(z - 1) * width_ + x].Position.y;
+        float height_u = vertices[(z + 1) * width_ + x].Position.y;
+        glm::vec3 normal{height_l - height_r, 2.0f, height_d - height_u};
+        normal = glm::normalize(normal);
+        vertices[z * width_ + x].Normal = normal;
       }
     }
   }

@@ -23,6 +23,7 @@ void main()
   FragPos = vec3(model * vec4(aPos, 1.0));
   vec4 world_position = vec4(FragPos, 1.0);
   gl_Position = projection * view * world_position;
+
   clipSpace = gl_Position;
   Normal = aNormal;
   TextureCoords = vec2((aTexCoords.x / 2.0) + 0.5, (aTexCoords.y / 2.0) + 0.5) * tiling;

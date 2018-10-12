@@ -14,21 +14,21 @@ namespace
     Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
     switch(bpp)
-    {
-    case 1:
-      return *p;
-    case 2:
-      return *(Uint16 *)p;
-    case 3:
-      if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-        return p[0] << 16 | p[1] << 8 | p[2];
-      else
-        return p[0] | p[1] << 8 | p[2] << 16;
-    case 4:
-      return *(Uint32 *)p;
-    default:
-      return 0;
-    }
+      {
+      case 1:
+        return *p;
+      case 2:
+        return *(Uint16 *)p;
+      case 3:
+        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+          return p[0] << 16 | p[1] << 8 | p[2];
+        else
+          return p[0] | p[1] << 8 | p[2] << 16;
+      case 4:
+        return *(Uint32 *)p;
+      default:
+        return 0;
+      }
   }
 
   float get_grey_value(const SDL_Surface *surface, int x, int y)
@@ -48,8 +48,7 @@ namespace
   {
     std::vector<Vertex> vertices;
     SDL_Surface *image = IMG_Load(file.c_str());
-    if (!image)
-    {
+    if (!image) {
       std::cerr << "Couln't load height map" << std::endl;
       return vertices;
     }
@@ -57,10 +56,8 @@ namespace
     *height = image->h;
     *width = image->w;
 
-    for (int z = 0; z < image->h; ++z)
-    {
-      for (int x = 0; x < image->w; ++x)
-      {
+    for (int z = 0; z < image->h; ++z) {
+      for (int x = 0; x < image->w; ++x) {
         auto color = get_grey_value(image, x, z) / 15.0f;
         vertices.emplace_back(Vertex{glm::vec3(x, color, z),
               glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
@@ -75,10 +72,8 @@ namespace
   std::vector<Vertex> default_map(unsigned int width, unsigned int height)
   {
     std::vector<Vertex> vertices;
-    for (unsigned int z = 0; z < height; ++z)
-    {
-      for (unsigned int x = 0; x < width; ++x)
-      {
+    for (unsigned int z = 0; z < height; ++z) {
+      for (unsigned int x = 0; x < width; ++x) {
         vertices.emplace_back(Vertex{glm::vec3(x, 0.0f, z),
               glm::vec3(0.0f, 2.0f, 0.0f), glm::vec2(x, z),
               glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec3{0.0f, 0.0f, 0.0f}});
@@ -116,10 +111,8 @@ void World::create_mesh(std::vector<Vertex>& vertices)
   std::vector<unsigned int> indices;
 
   // set indices
-  for (unsigned int z = 0; z < height_ - 1; ++z)
-  {
-    for (unsigned int x = 0; x < width_ - 1; ++x)
-    {
+  for (unsigned int z = 0; z < height_ - 1; ++z) {
+    for (unsigned int x = 0; x < width_ - 1; ++x) {
       int start = x + z * width_;
       indices.push_back(start);
       indices.push_back(start + 1);
@@ -131,12 +124,9 @@ void World::create_mesh(std::vector<Vertex>& vertices)
   }
 
   // set normals
-  for (unsigned int z = 0; z < height_ - 1; ++z)
-  {
-    for (unsigned int x = 0; x < width_ - 1; ++x)
-    {
-      if (x != 0 && x != width_ - 1 && z != 0 && z != height_ - 1)
-      {
+  for (unsigned int z = 0; z < height_ - 1; ++z) {
+    for (unsigned int x = 0; x < width_ - 1; ++x) {
+      if (x != 0 && x != width_ - 1 && z != 0 && z != height_ - 1) {
         float height_l = vertices[z * width_ + x - 1].Position.y;
         float height_r = vertices[z * width_ + x + 1].Position.y;
         float height_d = vertices[(z - 1) * width_ + x].Position.y;

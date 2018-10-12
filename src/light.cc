@@ -2,8 +2,8 @@
 #include <flat_vertices.hh>
 
 Light::Light(glm::vec3 position, glm::vec3 color)
-    : position_(position)
-    , color_(color)
+  : position_(position)
+  , color_(color)
 {
   init();
 }
@@ -27,7 +27,7 @@ void Light::init()
   glEnableVertexAttribArray(0);
 
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
-		      (void *)(3 * sizeof(float)));
+                        (void *)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 }
 
@@ -40,21 +40,21 @@ void Light::draw(Shader /* shader */)
 
 glm::vec3 Light::get_position() const
 {
-    return position_;
+  return position_;
 }
 
 glm::vec3 Light::get_color() const
 {
-    return color_;
+  return color_;
 }
 
 void Light::set_position(glm::vec3 position)
 {
-    position_ = position;
+  position_ = position;
 }
 
 
 void Light::set_color(glm::vec3 color)
 {
-    color_ = color;
+  color_ = color;
 }

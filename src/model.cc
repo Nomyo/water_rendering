@@ -7,7 +7,7 @@ Model::Model(const std::string& model_path, bool gamma)
 }
 
 Model::Model(const std::string& model_path, const std::string& texture_path,
-	     const std::string& directory, bool gamma)
+             const std::string& directory, bool gamma)
   : model_path_(model_path)
   , texture_path_(texture_path)
   , directory_(directory)
@@ -26,14 +26,13 @@ void Model::load_model(const std::string &path)
 {
   Assimp::Importer importer;
   const aiScene* scene = importer.ReadFile(path,
-					   aiProcess_Triangulate |
-					   aiProcess_FlipUVs |
-					   aiProcess_CalcTangentSpace);
+                                           aiProcess_Triangulate |
+                                           aiProcess_FlipUVs |
+                                           aiProcess_CalcTangentSpace);
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
-      !scene->mRootNode)
-  {
+      !scene->mRootNode) {
     std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString()
-	      << std::endl;
+              << std::endl;
     return;
   }
 
@@ -47,8 +46,7 @@ void Model::load_model(const std::string &path)
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
   // Process Meshes of current node
-  for (unsigned int i = 0; i < node->mNumMeshes; ++i)
-  {
+  for (unsigned int i = 0; i < node->mNumMeshes; ++i) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
     meshes_.push_back(processMesh(mesh, scene));
   }
@@ -64,8 +62,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
   std::vector<unsigned int> indices;
   std::vector<Texture> textures;
 
-  for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
-  {
+  for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
     Vertex vertex;
     glm::vec3 vector;
 
@@ -82,8 +79,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     vertex.Normal = vector;
 
     // texture coordinates
-    if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
-    {
+    if(mesh->mTextureCoords[0]) { // does the mesh contain texture coordinates?
       glm::vec2 vec;
       vec.x = mesh->mTextureCoords[0][i].x;
       vec.y = mesh->mTextureCoords[0][i].y;
@@ -104,8 +100,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     vertices.push_back(vertex);
   }
 
-  for(unsigned int i = 0; i < mesh->mNumFaces; i++)
-  {
+  for(unsigned int i = 0; i < mesh->mNumFaces; i++) {
     aiFace face = mesh->mFaces[i];
 
     // retrieve all indices of the face and store them in the indices vector
@@ -132,11 +127,10 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
   textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-  if (textures_loaded_.size() == 0 && texture_path_.size() != 0)
-  {
+  if (textures_loaded_.size() == 0 && texture_path_.size() != 0) {
     Texture texture;
     texture.id = TextureFromFile(texture_path_,
-				 gamma_correction_);
+                                 gamma_correction_);
     texture.type = aiTextureType_DIFFUSE;
     texture.path = texture_path_;
     textures.push_back(texture);
@@ -147,37 +141,34 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
 }
 
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial *mat,
-						 aiTextureType type,
-						 std::string typeName)
+                                                 aiTextureType type,
+                                                 std::string typeName)
 {
   std::vector<Texture> textures;
   for (unsigned int i = 0; i < mat->GetTextureCount(type); ++i)
-  {
-    aiString str;
-    mat->GetTexture(type, i, &str);
-
-    bool skip = false;
-    for (unsigned int j = 0; j < textures_loaded_.size(); ++j)
     {
-      if (std::strcmp(textures_loaded_[j].path.C_Str(), str.C_Str()) == 0)
-      {
-	textures.push_back(textures_loaded_[j]);
-	skip = true;
-	break;
+      aiString str;
+      mat->GetTexture(type, i, &str);
+
+      bool skip = false;
+      for (unsigned int j = 0; j < textures_loaded_.size(); ++j) {
+        if (std::strcmp(textures_loaded_[j].path.C_Str(), str.C_Str()) == 0) {
+          textures.push_back(textures_loaded_[j]);
+          skip = true;
+          break;
+        }
+      }
+
+      if (!skip) {
+        Texture texture;
+        std::string file(str.C_Str());
+        texture.id = TextureFromFile(file + directory_, gamma_correction_);
+        texture.type = typeName;
+        texture.path = str;
+        textures.push_back(texture);
+        textures_loaded_.push_back(texture);
       }
     }
-
-    if (!skip)
-    {
-      Texture texture;
-      std::string file(str.C_Str());
-      texture.id = TextureFromFile(file + directory_, gamma_correction_);
-      texture.type = typeName;
-      texture.path = str;
-      textures.push_back(texture);
-      textures_loaded_.push_back(texture);
-    }
-  }
 
   return textures;
 }
@@ -192,8 +183,7 @@ unsigned int TextureFromFile(const std::string& filename, bool /*gamma*/)
   int nrComponents;
   unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 
-  if (data)
-  {
+  if (data) {
     GLenum format;
     if (nrComponents == 1)
       format = GL_RED;
@@ -213,8 +203,7 @@ unsigned int TextureFromFile(const std::string& filename, bool /*gamma*/)
 
     stbi_image_free(data);
   }
-  else
-  {
+  else {
     std::cout << "Texture failed to load at path: " << filename << std::endl;
     stbi_image_free(data);
   }

@@ -25,7 +25,7 @@ void main()
   vec2 refractTexCoords = vec2(ndc.x, ndc.y);
   vec2 reflectTexCoords = vec2(ndc.x, -ndc.y);
 
-
+  // Distorsion
   vec2 texCoordDist = texture(dudv_texture, vec2(TextureCoords.x + time, TextureCoords.y)).rg * 0.1;
   texCoordDist = TextureCoords + vec2(texCoordDist.x, texCoordDist.y + time);
   vec2 totalDistorsion = (texture(dudv_texture, texCoordDist).rg * 2.0 - 1.0) * dist_factor;
@@ -40,6 +40,7 @@ void main()
   vec4 reflectedColor = texture(reflection_texture, reflectTexCoords);
   vec4 refractedColor = texture(refraction_texture, refractTexCoords);
 
+  // Normal mapping
   vec3 toCameraNormalized = normalize(toCamera);
   float refractorVector = dot(toCameraNormalized, vec3(0.0, 1.0, 0.0));
   refractorVector = pow(refractorVector, 0.5);
@@ -52,6 +53,7 @@ void main()
   float specular = max(dot(reflectedLight, toCamera), 0.0);
   vec3 specularHighlights = lightColor * specular * 0.015;
 
+  // Final color
   FragColor = mix(reflectedColor, refractedColor, refractorVector);
   FragColor = mix(FragColor, vec4(0, 0.3, 0.6, 1.0), 0.2) + vec4(specularHighlights, 0.0);
 }

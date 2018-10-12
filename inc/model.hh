@@ -20,14 +20,14 @@
 #include <vector>
 
 unsigned int TextureFromFile(const std::string& file,
-			     bool gamma);
+                             bool gamma);
 
 class Model
 {
 public:
   Model(const std::string& model_path, bool gamma = false);
   Model(const std::string& model_path, const std::string& texture_path,
-	const std::string& directory, bool gamma);
+        const std::string& directory, bool gamma);
   void draw(Shader shader);
 
 private:
@@ -39,8 +39,8 @@ private:
   // check all material textures of a given type
   // Load textures only if they're note already loaded
   std::vector<Texture> loadMaterialTextures(aiMaterial *mat,
-					    aiTextureType type,
-					    std::string typeName);
+                                            aiTextureType type,
+                                            std::string typeName);
 
 private:
   std::vector<Texture> textures_loaded_;
