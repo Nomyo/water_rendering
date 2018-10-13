@@ -50,10 +50,11 @@ void main()
   normal = normalize(normal);
 
   vec3 reflectedLight = reflect(normalize(fromLight), normal);
-  float specular = max(dot(reflectedLight, toCamera), 0.0);
-  vec3 specularHighlights = lightColor * specular * 0.015;
+  float specular = max(dot(reflectedLight, toCamera) * 0.5, 0.0);
+  vec3 specularHighlights = lightColor * specular * 0.055;
 
   // Final color
+  reflectedColor += vec4(specularHighlights, 0.0);
   FragColor = mix(reflectedColor, refractedColor, refractorVector);
-  FragColor = mix(FragColor, vec4(0, 0.3, 0.6, 1.0), 0.2) + vec4(specularHighlights, 0.0);
+  FragColor = mix(FragColor, vec4(0, 0.3, 0.6, 1.0), 0.2);
 }

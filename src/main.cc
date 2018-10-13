@@ -41,7 +41,7 @@ int start_opengl()
 
   auto world = World("map/heightmap_03.png");
   auto water = Water(glm::vec3{12.0f, 12.5f, 12.0f}, 24.5, 24.5);
-  auto light = Light(glm::vec3{15.0f / 2, 30.0f, 30.0f},
+  auto light = Light(glm::vec3{5.0f / 2, 80.0f, 0.0f},
                      glm::vec3{1.0f, 1.0f, 1.0f});
   auto skybox = Skybox(faces);
   skybox.init(skybox_shader);
