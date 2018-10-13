@@ -1,3 +1,3 @@
 <p align="center">                                                                                                                                                      
-<img src =samples/water-rendering.if/>                                                    
+<img src =samples/water-rendering.gif/>                                                    
 </p>
