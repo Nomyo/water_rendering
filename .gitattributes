@@ -1,0 +1,2 @@
+src/main.cc linguist-vendored=true
+shaders/world.fs linguist-vendored=true
